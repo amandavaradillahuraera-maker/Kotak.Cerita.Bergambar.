@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kotak Cerita Bergambar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#FFF4D6;--ink:#3B2A5C;--card:#fff;--shadow:#3B2A5C;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2A2147;--ink:#FFF4D6;--card:#3B2F66;--shadow:#120C26}}
+:root[data-theme="dark"]{--bg:#2A2147;--ink:#FFF4D6;--card:#3B2F66;--shadow:#120C26}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS","Comic Sans MS",system-ui,sans-serif;font-weight:500;min-height:100vh}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:clamp(28px,7vw,44px);font-weight:800;margin:4px 0;text-align:center;line-height:1.1}
+.sub{text-align:center;font-size:clamp(18px,4.5vw,24px);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:4px solid #2D7FF9;outline-offset:3px}
+.tile{border:4px solid var(--shadow);border-radius:24px;padding:14px 8px;background:var(--c);box-shadow:0 6px 0 var(--shadow);display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;color:#3B2A5C;transition:transform .12s}
+.tile:active{transform:translateY(5px);box-shadow:0 1px 0 var(--shadow)}
+.tile .q{font-size:clamp(48px,14vw,76px);line-height:1.1}
+.tile .n{font-size:clamp(18px,4.5vw,24px);font-weight:700}
+.tile .ok{position:absolute;top:6px;right:10px;font-size:20px}
+.tile.gap{background:#fff;--c:#fff}
+.wide{grid-column:1/-1;background:#7C4DFF;color:#fff;border:4px solid var(--shadow);border-radius:24px;padding:12px;font-size:clamp(20px,5vw,28px);font-weight:800;box-shadow:0 6px 0 var(--shadow)}
+.wide:active{transform:translateY(5px);box-shadow:0 1px 0 var(--shadow)}
+.stage{perspective:900px}
+.big{background:var(--c);border:5px solid var(--shadow);border-radius:32px;box-shadow:0 8px 0 var(--shadow);text-align:center;padding:20px 12px;color:#3B2A5C;animation:flip .5s ease-out}
+@keyframes flip{from{transform:rotateY(90deg)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){.big{animation:none}}
+.big .e{font-size:clamp(110px,38vw,230px);line-height:1.1}
+.big .t{font-size:clamp(36px,10vw,60px);font-weight:800;line-height:1}
+.ask{background:var(--card);border:3px dashed var(--ink);border-radius:20px;padding:12px 16px;margin-top:18px;font-size:clamp(18px,4.6vw,23px)}
+.ask b{display:block;margin-bottom:4px}
+.ask ul{margin:0;padding-left:22px}
+.nav{display:flex;gap:10px;margin-top:18px}
+.nav button{flex:1;padding:12px 6px;font-size:clamp(17px,4.4vw,22px);font-weight:800;background:var(--card);border:4px solid var(--shadow);border-radius:18px;box-shadow:0 5px 0 var(--shadow)}
+.nav button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--shadow)}
+.strip{min-height:110px;background:var(--card);border:4px dashed var(--ink);border-radius:24px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;font-size:clamp(44px,13vw,68px)}
+.strip:empty::before{content:"Ayo pilih gambar untuk membuat ceritamu";font-size:clamp(17px,4.4vw,22px);text-align:center}
+.strip .it{cursor:pointer;background:none;border:0;font-size:inherit;padding:0 4px;animation:pop .25s}
+@keyframes pop{from{transform:scale(.3)}to{transform:none}}
+.pick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.pick .tile{padding:8px 2px}
+.pick .tile .q{font-size:clamp(36px,11vw,56px)}
+.pick .tile .n{font-size:clamp(13px,3.4vw,17px)}
+.hint{text-align:center;font-size:clamp(16px,4vw,20px);margin:10px 0 0}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var K=[
+{e:"🐔",n:"Ayam",c:"#FFD166",q:["Ayam bersuara apa?","Ayam suka makan apa?","Ayam punya berapa kaki?"]},
+{e:"🏠",n:"Rumah",c:"#FF9AA2",q:["Siapa yang tinggal di rumah?","Rumahmu warnanya apa?","Apa yang kamu lakukan di rumah?"]},
+{e:"🌳",n:"Pohon",c:"#95D5A0",q:["Pohon warnanya apa?","Siapa yang suka berteduh di bawah pohon?","Pohon memberi kita apa?"]},
+{e:"🌸",n:"Bunga",c:"#F7B5E6",q:["Bunga ini wangi atau tidak?","Bunga warnanya apa?","Bunga perlu apa supaya tumbuh?"]},
+{e:"👧",n:"Anak",c:"#A8D8FF",q:["Siapa namamu?","Apa yang kamu suka mainkan?","Apa yang dilakukan anak ini?"]},
+{e:"☀️",n:"Matahari",c:"#FFE08A",q:["Matahari muncul pagi atau malam?","Kalau matahari bersinar, rasanya bagaimana?","Warna matahari apa?"]},
+{e:"🐱",n:"Kucing",c:"#FFB88C",q:["Kucing bersuara apa?","Kucing suka makan apa?","Bagaimana cara kita menyayangi kucing?"]},
+{e:"🍎",n:"Apel",c:"#FF8A80",q:["Apel warnanya apa?","Apel rasanya manis atau asam?","Siapa yang suka makan apel?"]}
+];
+var app=document.getElementById("app"),seen={},story=[];
+function tile(i,extra){var k=K[i];return '<button class="tile" style="--c:'+k.c+'" onclick="'+extra+'" aria-label="'+k.n+'">'+(seen[i]&&extra.indexOf("show")==0?'<span class="ok">⭐</span>':'')+'<span class="q">'+k.e+'</span><span class="n">'+k.n+'</span></button>';}
+function home(){
+ var h='<h1>📦 Kotak Cerita Bergambar</h1><p class="sub">🌸 Pilih salah satu gambar!</p><div class="grid">';
+ for(var i=0;i<K.length;i++)h+=tile(i,"show("+i+")");
+ h+='<button class="wide" onclick="build()">📖 Ayo buat ceritamu!</button></div>';
+ app.innerHTML=h;window.scrollTo(0,0);
+}
+function show(i){
+ seen[i]=1;var k=K[i],n=K.length,p=(i+n-1)%n,x=(i+1)%n,qs="";
+ for(var j=0;j<k.q.length;j++)qs+="<li>"+k.q[j]+"</li>";
+ app.innerHTML='<div class="stage"><div class="big" style="--c:'+k.c+'"><div class="e">'+k.e+'</div><div class="t">'+k.n+'</div></div></div>'+
+ '<div class="ask"><b>💬 Ayo bercakap-cakap</b><ul>'+qs+'</ul></div>'+
+ '<div class="nav"><button onclick="show('+p+')" aria-label="Gambar sebelumnya">⬅️ Mundur</button><button onclick="home()">📦 Kotak</button><button onclick="show('+x+')" aria-label="Gambar berikutnya">Maju ➡️</button></div>';
+ window.scrollTo(0,0);
+}
+function build(){
+ var h='<h1>📖 Ceritaku</h1><p class="sub">Pilih gambar, lalu ceritakan urutannya!</p><div class="strip" id="strip"></div>'+
+ '<div class="ask"><b>💬 Ayo bercerita</b><ul><li>Gambar apa yang ada di ceritamu?</li><li>Siapa yang ada di dalam ceritamu?</li><li>Apa yang terjadi di ceritamu?</li></ul></div><div class="pick">';
+ for(var i=0;i<K.length;i++)h+=tile(i,"add("+i+")");
+ h+='</div><p class="hint">Ketuk gambar di atas untuk menghapusnya.</p><div class="nav"><button onclick="story=[];build()">🔄 Ulang</button><button onclick="home()">📦 Kotak</button></div>';
+ app.innerHTML=h;draw();window.scrollTo(0,0);
+}
+function draw(){var s=document.getElementById("strip"),h="";for(var i=0;i<story.length;i++)h+='<button class="it" onclick="del('+i+')" aria-label="Hapus '+K[story[i]].n+'">'+K[story[i]].e+'</button>';s.innerHTML=h;}
+function add(i){if(story.length<8){story.push(i);draw();}}
+function del(i){story.splice(i,1);draw();}
+home();
+</script>
+</body>
+</html>
